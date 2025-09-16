@@ -32,7 +32,9 @@ app.use((error,req,res,next)=>{
     if(req.headersSent){
        return next(error);
     }
-    res.status(error.statusCode || 500).json(error.message || "something went wrong try again");
+    res
+    .status(error.statusCode || 500)
+    .json(error.message || "something went wrong try again");
 })
 
 async function startServer(){       

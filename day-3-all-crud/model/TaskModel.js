@@ -4,12 +4,12 @@ const TaskSchema = mongoose.Schema({
 
     task:{
         type:String,
-        require:true,
+        required:true,
         trim:true
     },
     description:{
         type:String,
-        require:true,
+        required:true,
         trim:true,
     }
 })
