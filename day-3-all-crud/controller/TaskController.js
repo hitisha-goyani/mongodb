@@ -44,7 +44,7 @@ const getSpecificTask = async (req,res,next)=>{
             return next(new httpError("task not found",404))
         }
 
-        res.status(200).json({message:"task not found",existingTask});
+        res.status(200).json({message:"task found",existingTask});
 
     }catch(error){
         next(new httpError(error.message,400))
@@ -75,7 +75,7 @@ const updateTask = async(req,res,next)=>{
 
     try{
         const id = req.params.id;
-    const  exitingTask = await TaskModel.findById(id);
+        const  exitingTask = await TaskModel.findById(id);
 
     if(!exitingTask){
         return next(new httpError("id not found",404))
