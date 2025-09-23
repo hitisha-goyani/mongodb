@@ -35,4 +35,25 @@ const add = async (req,res,next) =>{
 
 }  
 
-export default add ;
+//login 
+
+const login = async(req,res,next) =>{
+    try{
+        const {email,password} = req.body;
+
+        const use = await user.findByCreadiantials(email,password);
+
+        if(!use){
+            return next(new httpError("unable to login",400))
+        }
+
+        res.status(200).json({message:"login successfully",use});
+
+    }catch(error){
+
+        next(new httpError(error.message,500))
+
+    }
+}
+
+export default { add,login};

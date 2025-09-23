@@ -2,6 +2,7 @@
 
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs"
+import { use } from "react";
 
 const userSchema = new mongoose.Schema({
 
@@ -36,7 +37,14 @@ const userSchema = new mongoose.Schema({
             }
         }
 
-    }
+    },
+
+    tokens:[{
+        token:{
+            type:String,
+           trim:true,   
+        }
+    }]
 });
 
 
@@ -60,6 +68,51 @@ userSchema.pre("save",async function(next){
     }
 })
 
+userSchema.statics.findByCreadiantials = async function (email,password){
+    try{
+
+        const user = await this.findOne({email});
+
+        if(!user){
+            throw new Error("unable to login");
+        }
+
+        const isMatched = await bcrypt.compare(password,user.password);
+
+        if(!isMatched) {
+            throw new Error("unable to login");
+        }
+
+    return user;
+    }catch(error){
+        throw new Error(error.message)
+    }
+};
+
+
+userSchema.methods.generateAuthToken = async function (){
+    try{
+        const user = this;
+
+        const token = jwt.sign({__id:user,__id},"usertoken");
+
+        if(!token){
+            throw new Error("failed to generate token");
+        }
+
+        user.tokens = user.tokens.concat({token})
+
+        user.save()
+
+    }catch(error){
+
+        throw new Error(error.message);   
+
+    }
+};
+
+
+    
 
 const user = mongoose.model("user", userSchema);
 
