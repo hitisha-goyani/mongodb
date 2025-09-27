@@ -99,15 +99,13 @@ userSchema.methods.generateAuthUser = async function (){
 
         user.tokens = user.tokens.concat({token});
 
-        await user.save();
+        await user.save();  
 
         return token;
 
     }catch(error){
 
         throw new Error(error.message);
-
-
     };
 
 }

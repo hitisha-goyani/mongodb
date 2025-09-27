@@ -17,7 +17,9 @@ router.post("/login",userController.login);
 
 //auth login
 
-router.get("/AuthLogin",auth,userController.authLogin)
+router.get("/AuthLogin",auth,userController.authLogin);
+
+//
 
 export default router;
 

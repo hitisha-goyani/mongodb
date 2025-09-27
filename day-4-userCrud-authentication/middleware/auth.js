@@ -26,6 +26,7 @@ const auth = async(req,res,next) =>{
         }
 
         req.use = use;
+        
 
         req.token = token;
 
