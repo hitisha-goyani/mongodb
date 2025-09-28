@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 import httpError from "./ErrorHandler.js";
-import user from "../model/UserModel.js";
+import User from "../model/UserModel.js";
 
 
 const auth = async(req,res,next) =>{
@@ -19,13 +19,13 @@ const auth = async(req,res,next) =>{
 
         const decode = jwt.verify(token,"authToken");
 
-        const use  = await user.findOne({_id:decode._id,"tokens.token":token});
+        const user  = await User.findOne({_id:decode._id,"tokens.token":token});
 
-        if(!use){
-            return next(new httpError("authorization failed",400))
+        if(!user){
+            return next(new httpError("authorization failed",400))                                                                                                                      
         }
 
-        req.use = use;
+        req.user= user;
         
 
         req.token = token;

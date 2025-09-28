@@ -19,7 +19,13 @@ router.post("/login",userController.login);
 
 router.get("/AuthLogin",auth,userController.authLogin);
 
-//
+//logout
+
+router.post("/logout",auth,userController.logOut);
+
+//logout all
+
+router.post("/logoutAll",auth,userController.logOutAll)
 
 export default router;
 

@@ -1,5 +1,5 @@
 import express from "express"
-import user from "../model/UserModel.js"
+import User from "../model/UserModel.js"
 import httpError from "../middleware/ErrorHandler.js"
 
 
@@ -17,7 +17,7 @@ const add = async (req,res,next) =>{
             password
         }
 
-        const saveUser = new user(newUser);
+        const saveUser = new User(newUser);
 
         const token =  await saveUser.generateAuthUser();
 
@@ -43,15 +43,15 @@ const login = async(req,res,next) =>{
     try{
         const {email,password} = req.body;
 
-        const use = await user.findByCreadiantials(email,password);
+        const user = await User.findByCreadiantials(email,password);
 
-        if(!use){
+        if(!user){
             return next(new httpError("unable to login",400))
         }
 
-        const token = await use.generateAuthUser();
+        const token = await user.generateAuthUser();
 
-        res.status(200).json({message:"login successfully",use,token});
+        res.status(200).json({message:"login successfully",user,token});
 
     }catch(error){
 
@@ -66,7 +66,7 @@ const login = async(req,res,next) =>{
 const authLogin = async (req,res,next) =>{
 
     try{
-        const user = req.use;
+        const user = req.user;
 
         res.status(200).json({message:"user login sucessfully",user})
     }
@@ -81,8 +81,8 @@ const authLogin = async (req,res,next) =>{
 const logOut = async (req,res,next) => {
     try{
 
-        req.user.tokens = req.user.token.filter((t)=>{
-            return t.token !== req.token;
+        req.user.tokens = req.user.tokens.filter((t)=>{
+         return t.token !== req.token;
         });
 
         await req.user.save();
@@ -96,4 +96,24 @@ const logOut = async (req,res,next) => {
     }
 
 };
-export default { add,login,authLogin,logOut};
+
+// logOut all 
+
+const logOutAll = async (req,res,next)=>{
+
+    try{
+
+         req.user.tokens=[];
+
+         await req.user.save();
+
+         res.status(200).json({message:"user logout successully from all device.."})
+
+    }catch(error){
+
+        next (new httpError(error.message))
+       
+    }
+
+}
+export default { add,login,authLogin,logOut,logOutAll};
