@@ -1,15 +1,23 @@
 
 
-import express from "express"
+import express from "express";
+import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import httpError from "./middleware/ErrorHandler.js";
 
 
+
+dotenv.config({path:"./.dev.env"});
+
 const app = express();
+
+
+app.use(express.json());
+app.set("view engine","ejs");
 
 app.get("/",(req,res)=>{
 
-    res.status(200).json("hello from server");
+res.render("home")
 })
 
 
