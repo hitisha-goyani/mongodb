@@ -27,5 +27,9 @@ router.post("/logout",auth,userController.logOut);
 
 router.post("/logoutAll",auth,userController.logOutAll)
 
+//update
+
+router.patch("/update",auth,userController.update)
+
 export default router;
 

@@ -6,6 +6,7 @@ import passport from "passport"
 import passportGoogle from "passport-google-oauth20";
 import User from "../model/User.js";
 
+
 const GoogleStrategy = passportGoogle.Strategy;
 
 passport.use(
@@ -16,7 +17,7 @@ passport.use(
             callbackURL:"/auth/google/redirect",
 
         },
-        async(accessToken,refreshToken,profile,done)=>{
+        async(accessToken,refreshToken,profile,done)=>{ 
             try{
                   // If user doesn't exist creates a new user. (similar to sign up)
                 const user = await User.findOne({googleId:profile.id});
@@ -28,16 +29,22 @@ passport.use(
                       email:profile.emails?.[0].value,
                        // we are using optional chaining because profile.emails may be undefined.
                     });
-                    if(newUser){
-                        done(null,newUser);
-                    }
-                    else{
-                        done(null,user);
-                    }
+                    // if(newUser){
+                    //     done(null,newUser);
+                    // }
+                    // else{
+                    //     done(null,user);
+                    // }
+
+                    return done(null,newUser);
                 }
+
+                return done(null,user);//handle exit user
 
 
             }catch(error){
+
+              return done(error, null);
 
             }
         }

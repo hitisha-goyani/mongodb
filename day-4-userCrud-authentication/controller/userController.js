@@ -115,5 +115,47 @@ const logOutAll = async (req,res,next)=>{
        
     }
 
+};
+
+
+// update 
+
+const update = async (req,res,next)=>{
+    try{
+
+        const {name,email,password} = req.body;
+
+        const user = await User.findOne({email});
+
+    if(user){
+     
+
+        return next(new httpError("user with this email id already exits..",400));
+    }
+
+    const updates = Object.keys(req.body);
+
+    const allowedUpdate = ["name","email","password"];
+
+    const isValid = updates.every((field) => allowedUpdate.includes(field));
+
+
+    if(!isValid){
+        return next(new httpError("only allowed fields can be update",400))
+    }
+
+    updates.forEach((update)=>{
+        req.user[update] = req.body[update];
+    });
+
+    await req.user.save();
+
+    res.status(200).json({message:"user data updated",user:req.user});
+
+    }catch(error){
+        next (new httpError(error.message,500));
+    }
+
+
 }
-export default { add,login,authLogin,logOut,logOutAll};
+export default { add,login,authLogin,logOut,logOutAll,update};
