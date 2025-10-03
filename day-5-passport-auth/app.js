@@ -3,12 +3,13 @@
 import express from "express";
 import dotenv from "dotenv";
 
+
 import connectDB from "./config/db.js";
 import httpError from "./middleware/ErrorHandler.js";
 import authRoutes from "./routes/authRoutes.js"
 
 
-
+import "./config/passport.js"
 dotenv.config({path:"./.dev.env"});
 
 const app = express();

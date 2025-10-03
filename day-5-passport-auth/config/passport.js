@@ -14,7 +14,7 @@ passport.use(
         {
             clientID:process.env.G_CLITET_ID,
             clientSecret:process.env.G_CLITET_SECRET,
-            callbackURL:"/auth/google/redirect",
+            callbackURL:"/auth/redirect",
 
         },
         async(accessToken,refreshToken,profile,done)=>{ 
