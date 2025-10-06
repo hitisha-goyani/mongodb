@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config({path:"./.dev.env"});
 
 
 import passport from "passport"
@@ -12,8 +10,8 @@ const GoogleStrategy = passportGoogle.Strategy;
 passport.use(
     new GoogleStrategy(
         {
-            clientID:process.env.G_CLITET_ID,
-            clientSecret:process.env.G_CLITET_SECRET,
+            clientID:process.env.G_CLIENT_ID,
+            clientSecret:process.env.G_CLIENT_SECRET ,
             callbackURL:"/auth/redirect",
 
         },
@@ -29,13 +27,7 @@ passport.use(
                       email:profile.emails?.[0].value,
                        // we are using optional chaining because profile.emails may be undefined.
                     });
-                    // if(newUser){
-                    //     done(null,newUser);
-                    // }
-                    // else{
-                    //     done(null,user);
-                    // }
-
+            
                     return done(null,newUser);
                 }
 
@@ -51,5 +43,16 @@ passport.use(
 
 
     )
-)
+);
+
+
+
+passport.serializeUser((user,done)=>{
+    done(null,user.id);
+});
+
+passport.deserializeUser(async(id,done)=>{
+    const user = await User.findById(id);
+    done(null,user);
+})
 

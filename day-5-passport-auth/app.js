@@ -1,26 +1,56 @@
 
-
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config({path:"./.dev.env"});
+import express from "express";
+
+
+import session from "express-session";
+import passport from "passport";
 
 
 import connectDB from "./config/db.js";
 import httpError from "./middleware/ErrorHandler.js";
-import authRoutes from "./routes/authRoutes.js"
+import authRoutes from "./routes/authRoutes.js";
+import profileRoutes from "./routes/profileRoute.js"
 
 
-import "./config/passport.js"
-dotenv.config({path:"./.dev.env"});
+
+
 
 const app = express();
 
-app.use("/auth",authRoutes)
 app.use(express.json());
 app.set("view engine","ejs");
 
+
+app.use(
+    session({
+        secret:"session-secret",
+        resave:false,
+        saveUninitialized: false,
+        cookie:{
+            secure:process.env.NODE_ENV === "production",
+            maxAge:24 * 60 * 60 *1000,
+        }
+    })
+)
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
+import "./config/passport.js"
+
+
+app.use("/auth",authRoutes);
+
+app.use("/profile",profileRoutes)
+
+
+
 app.get("/",(req,res)=>{
 
-res.render("home")
+res.render("home",{user:req.user});
 })
 
 
@@ -32,7 +62,7 @@ app.use((req,res,next)=>{
 })
 
 
-//xcenterized error
+//centerized error
 
 
 app.use((error,req,res,next)=>{
@@ -66,7 +96,7 @@ const startServer = async () =>{
     }catch(error){
 
         console.log(error.message);
-        process.exit(0);
+        process.exit(1);
 
     }
 };
