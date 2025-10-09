@@ -74,7 +74,9 @@ app.use((error,req,res,next)=>{
     res.status(error.statusCode|| 500)
     .json(error.message || "something went wrong try again")
 })
-const port = 5000;
+const port = process.env.PORT  || 5000;
+
+console.log("process.env.PORT ",process.env.PORT)
 
 const startServer = async () =>{
 

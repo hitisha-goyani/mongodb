@@ -21,31 +21,12 @@ router.get("/google",
 })
 )
 
-// router.get("/redirect",passport.authenticate("google"),(req,res)=>{
-//     res.redirect("/profile");
-// });
 
-// router.get("/logout",(req,res)=>{
-//     req.logout((err)=>{
-//         if(err){
-//             return res.status(500).json("failed to logout");
-//         }
-//     });
-//     res.redirect("/");
-// })
 
 router.get("/redirect", passport.authenticate("google"), (req, res) => {
   res.redirect("/profile");
 });
 
-// router.get("/logout", (req, res) => {
-//   req.logout((err) => {
-//     if (err) {
-//       return res.status(500).json("failed to logout");
-//     }
-//   });
-//   res.redirect("/");
-// });
 
 
 router.get("/logout", (req, res) => {

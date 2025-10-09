@@ -1,11 +1,14 @@
 
 
+import dotenv from "dotenv";
+dotenv.config({ path: "./.dev.env" });
 import passport from "passport"
 import passportGoogle from "passport-google-oauth20";
 import User from "../model/User.js";
 
 
 const GoogleStrategy = passportGoogle.Strategy;
+console.log("client id",process.env.G_CLIENT_ID)
 
 passport.use(
     new GoogleStrategy(
